@@ -1,1 +1,0 @@
-# CardBoardVRInterface2.0
