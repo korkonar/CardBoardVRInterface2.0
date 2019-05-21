@@ -14,7 +14,7 @@ PlayerSettings:
   accelerometerFrequency: 60
   companyName: DefaultCompany
   productName: VR
-  defaultCursor: {fileID: 2800000, guid: 2d89a5f92f03449f2bd6c28c914115fc, type: 3}
+  defaultCursor: {fileID: 2800000, guid: 226cfc1dcfd9df449a7c4e33729e0922, type: 3}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
   m_ShowUnitySplashScreen: 1
@@ -262,7 +262,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 2d89a5f92f03449f2bd6c28c914115fc, type: 3}
+      m_Icon: {fileID: 2800000, guid: 226cfc1dcfd9df449a7c4e33729e0922, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
