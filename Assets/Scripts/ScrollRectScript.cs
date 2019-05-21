@@ -46,13 +46,13 @@ public class ScrollRectScript : MonoBehaviour
     {
         mouseDown = false;
         buttonDown = false;
-        scrollRect.verticalNormalizedPosition -= 0.5f;
+        scrollRect.verticalNormalizedPosition -= 0.3f;
     }
 
     private void ScrollUp()
     {
         mouseDown = false;
         buttonUp = false;
-        scrollRect.verticalNormalizedPosition += 0.5f;
+        scrollRect.verticalNormalizedPosition += 0.3f;
     }
 }
