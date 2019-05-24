@@ -9,17 +9,17 @@ public class ButtonScript : MonoBehaviour, IPointerDownHandler
     [SerializeField]
     private ScrollRectScript scrollRectScript;
     [SerializeField]
-    private bool isDownButton;
+    private bool isRightButton;
 
     public void OnPointerDown (PointerEventData eventData)
     {
-        if (isDownButton)
+        if (isRightButton)
         {
-            scrollRectScript.ButtonDownIsPressed();
+            scrollRectScript.ButtonRightIsPressed();
         }
         else
         {
-            scrollRectScript.ButtonUpIsPressed();
+            scrollRectScript.ButtonLeftIsPressed();
         }
     }
 }

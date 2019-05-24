@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class ScrollRectScript : MonoBehaviour
 {
     private ScrollRect scrollRect;
-    private bool mouseDown, buttonDown, buttonUp;
+    private bool mouseDown, buttonRight, buttonLeft;
 
     // Start is called before the first frame update
     void Start()
@@ -19,40 +19,40 @@ public class ScrollRectScript : MonoBehaviour
     {
         if (mouseDown)
         {
-            if (buttonDown)
+            if (buttonRight)
             {
-                ScrollDown();
+                ScrollRight();
             }
-            else if (buttonUp)
+            else if (buttonLeft)
             {
-                ScrollUp();
+                ScrollLeft();
             }
         }
     }
 
-    public void ButtonDownIsPressed()
+    public void ButtonRightIsPressed()
     {
         mouseDown = true;
-        buttonDown = true;
+        buttonRight = true;
     }
 
-    public void ButtonUpIsPressed()
+    public void ButtonLeftIsPressed()
     {
         mouseDown = true;
-        buttonUp = true;
+        buttonLeft = true;
     }
 
-    private void ScrollDown()
+    private void ScrollRight()
     {
         mouseDown = false;
-        buttonDown = false;
-        scrollRect.verticalNormalizedPosition -= 0.3f;
+        buttonRight = false;
+        scrollRect.horizontalNormalizedPosition += 0.3f;
     }
 
-    private void ScrollUp()
+    private void ScrollLeft()
     {
         mouseDown = false;
-        buttonUp = false;
-        scrollRect.verticalNormalizedPosition += 0.3f;
+        buttonLeft = false;
+        scrollRect.horizontalNormalizedPosition -= 0.3f;
     }
 }
