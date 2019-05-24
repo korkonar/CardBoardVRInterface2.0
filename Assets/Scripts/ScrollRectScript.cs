@@ -7,6 +7,8 @@ public class ScrollRectScript : MonoBehaviour
 {
     private ScrollRect scrollRect;
     private bool mouseDown, buttonRight, buttonLeft;
+    
+    public float jumpSize;
 
     // Start is called before the first frame update
     void Start()
@@ -46,13 +48,33 @@ public class ScrollRectScript : MonoBehaviour
     {
         mouseDown = false;
         buttonRight = false;
-        scrollRect.horizontalNormalizedPosition += 0.3f;
+        StartCoroutine(ScrollAnimationRight());
+        //scrollRect.horizontalNormalizedPosition += 0.3f;
     }
 
     private void ScrollLeft()
     {
         mouseDown = false;
         buttonLeft = false;
-        scrollRect.horizontalNormalizedPosition -= 0.3f;
+        //scrollRect.horizontalNormalizedPosition -= 0.3f;
+        StartCoroutine(ScrollAnimationLeft());
+    }
+
+    private IEnumerator ScrollAnimationLeft()
+    {
+        for (float f = 0.0f; f < jumpSize; f += 0.025f)
+        {
+            scrollRect.horizontalNormalizedPosition -= 0.025f;
+            yield return null;
+        }
+    }
+
+    private IEnumerator ScrollAnimationRight()
+    {
+        for (float f = 0.0f; f < jumpSize; f += 0.025f)
+        {
+            scrollRect.horizontalNormalizedPosition += 0.025f;
+            yield return null;
+        }
     }
 }
