@@ -4,23 +4,52 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    public void DisableFirstToSecond(Animator anim)
+    //public void DisableFirstToSecond(Animator anim)
+    //{
+    //    anim.SetBool("FirstToSecond", false);
+    //}
+
+    //public void EnableFirstToSecond(Animator anim)
+    //{
+    //    anim.SetBool("FirstToSecond", true);
+    //}
+
+    //public void DisableSecondToThird(Animator anim)
+    //{
+    //    anim.SetBool("SecondToThird", false);
+    //}
+
+    //public void EnableSecondToThird(Animator anim)
+    //{
+    //    anim.SetBool("SecondToThird", true);
+    //}
+    public void EnableDisplayed(Animator anim)
     {
-        anim.SetBool("FirstToSecond", false);
+        anim.SetBool("isDisplayed", true);
     }
 
-    public void EnableFirstToSecond(Animator anim)
+    public void DisableDisplayed(Animator anim)
     {
-        anim.SetBool("FirstToSecond", true);
+        anim.SetBool("isDisplayed", false);
     }
 
-    public void DisableSecondToThird(Animator anim)
+    public void EnableOutside(Animator anim)
     {
-        anim.SetBool("SecondToThird", false);
+        anim.SetBool("isOutside", true);
     }
 
-    public void EnableSecondToThird(Animator anim)
+    public void DisableOutside(Animator anim)
     {
-        anim.SetBool("SecondToThird", true);
+        anim.SetBool("isOutside", false);
+    }
+
+    public void EnableObject(Animator anim)
+    {
+        anim.SetBool("disableObject", false);
+    }
+
+    public void DisableObject(Animator anim)
+    {
+        anim.SetBool("disableObject", true);
     }
 }
