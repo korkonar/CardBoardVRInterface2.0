@@ -10,6 +10,28 @@ public class UIManager : MonoBehaviour
     public string action;
     private bool timer = false;
 
+    public JsonData data;
+
+    public string path;
+
+    private void Start()
+    {
+        if (!PlayerPrefs.HasKey("userID"))
+        {
+            PlayerPrefs.SetInt("userID", 1);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("userID", PlayerPrefs.GetInt("userID") + 1);
+        }
+
+        data = new JsonData("User ID", PlayerPrefs.GetInt("userID"));
+
+        path = Path.Combine(Application.persistentDataPath, "data.json");
+        SerializeData();
+        DeserializeData();
+    }
+
     private void Update()
     {
         if (timer)
@@ -76,24 +98,59 @@ public class UIManager : MonoBehaviour
     public void EndTimer()
     {
         timer = false;
-        WriteString(action, timeOfAction);
+        data = new JsonData(action, timeOfAction);
+        SerializeData();
+        DeserializeData();
+        //WriteString(action, timeOfAction);
     }
 
-    static void WriteString(string action, float timeOfAction)
+    //static void WriteString(string action, float timeOfAction)
+    //{
+    //    string path = "Assets/Resources/log.txt";
+
+    //    //Write some text to the test.txt file
+    //    StreamWriter writer = new StreamWriter(path, true);
+    //    writer.WriteLine(action + " " + timeOfAction);
+    //    writer.Close();
+
+    //    //Re-import the file to update the reference in the editor
+    //    AssetDatabase.ImportAsset(path);
+    //    TextAsset asset = Resources.Load<TextAsset>("log");
+
+    //    //Print the text from the file
+    //    //Debug.Log(asset.text);
+    //}
+
+    public void SerializeData()
     {
-        string path = "Assets/Resources/log.txt";
+        string jsonDataString = JsonUtility.ToJson(data, true);
 
-        //Write some text to the test.txt file
-        StreamWriter writer = new StreamWriter(path, true);
-        writer.WriteLine(action + " " + timeOfAction);
-        writer.Close();
+        File.WriteAllText(path, jsonDataString);
 
-        //Re-import the file to update the reference in the editor
-        AssetDatabase.ImportAsset(path);
-        TextAsset asset = Resources.Load<TextAsset>("log");
-
-        //Print the text from the file
-        //Debug.Log(asset.text);
+        Debug.Log(jsonDataString);
     }
 
+    public void DeserializeData()
+    {
+        string loadedJsonDataString = File.ReadAllText(path);
+
+        data = JsonUtility.FromJson<JsonData>(loadedJsonDataString);
+
+        Debug.Log("action: " + data.action.ToString() + " | time: " + data.time);
+     }
+}
+
+[System.Serializable]
+public class JsonData
+{
+    public string action;
+    public float time;
+
+    public JsonData(string action, float time)
+    {
+        this.action = action;
+        this.time = time;
+    }
+
+    public JsonData() { }
 }
