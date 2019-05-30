@@ -21,6 +21,9 @@ public class TapInput : MonoBehaviour
 
 
     void Awake(){
+        QualitySettings.vSyncCount = 0;  // VSync must be disabled
+        Application.targetFrameRate = 60;
+
         if (Microphone.devices.Length>0){
             microphoneInput = Microphone.Start(Microphone.devices[0],true,999,44100);
             microphoneInitialized = true;
@@ -57,7 +60,7 @@ public class TapInput : MonoBehaviour
             float level = Mathf.Sqrt(Mathf.Sqrt(levelMax));
             i += level;
         }else{
-            coolDown = 20;
+            coolDown = 10;
 
             int dec = 128;
             float[] waveData = new float[dec];
@@ -78,7 +81,7 @@ public class TapInput : MonoBehaviour
             i = i/20;
             GameObject.Find("Gyro").GetComponent<UnityEngine.UI.Text>().text = i.ToString();
             
-            if(Mathf.Abs(i - prevI) < 0.07f){
+            if(Mathf.Abs(i - prevI) < 0.05f){
                 if(spike2){
                     doubleClapCooldown = 60;
                 }
