@@ -3372,6 +3372,7 @@ MonoBehaviour:
   blurIterations: 0
   blurDownSample: 0
   debug: 1
+  go: {fileID: 386868837}
 --- !u!114 &629963875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3403,7 +3404,6 @@ MonoBehaviour:
   webCamTexture: {fileID: 0}
   width: 256
   height: 256
-  go: {fileID: 386868837}
 --- !u!124 &629963876
 Behaviour:
   m_ObjectHideFlags: 0
