@@ -19,6 +19,7 @@ using System;
 using Gvr.Internal;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 #if UNITY_2017_2_OR_NEWER
 using UnityEngine.XR;
@@ -32,6 +33,16 @@ public class GvrPointerInputModuleImpl
     private GvrBasePointer pointer;
     private Vector2 lastPose;
     private bool isPointerHovering = false;
+
+    //clapping variables
+    public bool usingClapping = true;
+    private int coolDown = 0;
+    private int doubleClapCooldown = 0;
+    private float i;
+    private float prevI = 0;
+    private bool spike1 = false;
+    private bool spike2 = false;
+    private AudioClip microphoneInput = null;
 
     // Active state
     private bool isActive = false;
@@ -147,6 +158,19 @@ public class GvrPointerInputModuleImpl
     [SuppressMemoryAllocationError(IsWarning = true, Reason = "Pending documentation.")]
     public void Process()
     {
+        //initialise microphone if needed
+        if(microphoneInput == null && usingClapping) {
+            if (Microphone.devices.Length > 0) {
+                QualitySettings.vSyncCount = 0;  // VSync must be disabled
+                Application.targetFrameRate = 60;
+                microphoneInput = Microphone.Start(Microphone.devices[0], true, 999, 44100);
+            } else {
+                usingClapping = false;
+            }
+        }
+
+        usingClapping = GameObject.Find("UseClap").GetComponent<Toggle>().isOn;
+
         // If the pointer is inactive, make sure it is exited if necessary.
         if (!IsPointerActiveAndAvailable())
         {
@@ -166,11 +190,14 @@ public class GvrPointerInputModuleImpl
         // True if the trigger is held down.
         bool triggering = false;
 
-        if (IsPointerActiveAndAvailable())
+        if (IsPointerActiveAndAvailable() && !usingClapping)
         {
             triggerDown = Pointer.TriggerDown;
             triggering = Pointer.Triggering;
+        }else if (usingClapping) {
+            triggerDown = clapListen();
         }
+
 
         bool handlePendingClickRequired = !triggering;
 
@@ -181,11 +208,13 @@ public class GvrPointerInputModuleImpl
         }
         else if (triggerDown && !CurrentEventData.eligibleForClick)
         {
+            Debug.Log("new tigger action");
             // New trigger action.
             HandleTriggerDown();
         }
         else if (handlePendingClickRequired)
         {
+            //Debug.Log("pending click");
             // Check if there is a pending click to handle.
             HandlePendingClick();
         }
@@ -633,5 +662,85 @@ public class GvrPointerInputModuleImpl
         ModuleController.RaycastResultCache.Clear();
         ModuleController.eventSystem.RaycastAll(CurrentEventData,
                                                 ModuleController.RaycastResultCache);
+    }
+
+    private bool clapListen() {
+        //get mic volume
+        coolDown--;
+        if (doubleClapCooldown > 0) {
+            doubleClapCooldown--;
+        }
+        if (coolDown > 0) {
+            int dec = 32;
+            float[] waveData = new float[dec];
+            int micPosition = Microphone.GetPosition(null) - (dec + 1); // null means the first microphone
+            microphoneInput.GetData(waveData, micPosition);
+
+            // Getting a peak on the last 128 samples
+            float levelMax = 0;
+            for (int i = 0; i < dec; i++) {
+                float wavePeak = waveData[i] * waveData[i];
+                if (levelMax < wavePeak) {
+                    levelMax = wavePeak;
+                }
+            }
+            float level = Mathf.Sqrt(Mathf.Sqrt(levelMax));
+            i += level;
+        }
+        else {
+            coolDown = 10;
+
+            int dec = 128;
+            float[] waveData = new float[dec];
+            int micPosition = Microphone.GetPosition(null) - (dec + 1); // null means the first microphone
+            microphoneInput.GetData(waveData, micPosition);
+
+            // Getting a peak on the last 128 samples
+            float levelMax = 0;
+            for (int i = 0; i < dec; i++) {
+                float wavePeak = waveData[i] * waveData[i];
+                if (levelMax < wavePeak) {
+                    levelMax = wavePeak;
+                }
+            }
+            float level = Mathf.Sqrt(Mathf.Sqrt(levelMax));
+            i += level;
+
+            i = i / 10;
+            GameObject.Find("Mic").GetComponent<UnityEngine.UI.Text>().text = i.ToString();
+            //Debug.Log(i);
+            if (Mathf.Abs(i - prevI) < 0.05f) {
+                if (spike2) {
+                    doubleClapCooldown = 60;
+                }
+                spike1 = false;
+                spike2 = false;
+                GameObject.Find("Clap").GetComponent<UnityEngine.UI.Text>().text = "";
+            }
+            else if (!spike1) {
+                spike1 = true;
+            }
+            else {
+                if (doubleClapCooldown > 0) {
+                    spike2 = false;
+                    spike1 = false;
+                    GameObject.Find("Mic").GetComponent<UnityEngine.UI.Text>().text = "double clap";
+                    Debug.Log("CLAP");
+                    return true;
+                }
+                else {
+                    spike2 = false;
+                    spike1 = false;
+                    GameObject.Find("Mic").GetComponent<UnityEngine.UI.Text>().text = "clap";
+                    Debug.Log("CLAP");
+                    return true;
+                }
+            }
+
+            prevI = i;
+            i = 0;
+        }
+
+        return false;
     }
 }
