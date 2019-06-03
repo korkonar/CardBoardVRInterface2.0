@@ -25,7 +25,6 @@ namespace OpticalFlow.Demo
             if(webCamTexture != null && webCamTexture.didUpdateThisFrame)
             {
                 textureUpdateEvent.Invoke(webCamTexture);
-
             }
         }
 

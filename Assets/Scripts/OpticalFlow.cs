@@ -1,12 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
-namespace OpticalFlow
-{
+namespace OpticalFlow {
 
-    public class OpticalFlow : MonoBehaviour
-    {
+    public class OpticalFlow : MonoBehaviour {
         public static int[] R = new int[15];
         public static int[] G = new int[15];
         bool left = false;
@@ -14,8 +11,7 @@ namespace OpticalFlow
         float cooldown = 1f;
         float lastMove;
 
-        protected enum Pass
-        {
+        protected enum Pass {
             Flow = 0,
             DownSample = 1,
             BlurH = 2,
@@ -33,20 +29,16 @@ namespace OpticalFlow
 
         #region MonoBehaviour functions
 
-        protected void Start()
-        {
+        protected void Start() {
             lastMove = -cooldown;
         }
 
-        protected void OnRenderImage(RenderTexture source, RenderTexture destination)
-        {
+        protected void OnRenderImage(RenderTexture source, RenderTexture destination) {
             Graphics.Blit(resultBuffer, destination, flowMaterial, (int)Pass.Visualize);
         }
 
-        protected void OnDestroy()
-        {
-            if (prevFrame != null)
-            {
+        protected void OnDestroy() {
+            if (prevFrame != null) {
                 prevFrame.Release();
                 prevFrame = null;
 
@@ -58,17 +50,17 @@ namespace OpticalFlow
             }
         }
 
-        protected void OnGUI()
-        {
+        protected void OnGUI() {
 
-            if (!debug || prevFrame == null || flowBuffer == null) return;
+            if (!debug || prevFrame == null || flowBuffer == null)
+                return;
 
             const int offset = 10;
             const int width = 176, height = 144;
 
-            GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), flowBuffer);
+            GUI.DrawTexture(new Rect(offset, offset + height, width, height), flowBuffer);
             GUI.DrawTexture(new Rect(offset, offset, width, height), prevFrame);
-
+            
 
             //GUIStyle gs = new GUIStyle();
             //gs.fontSize = 200;
@@ -76,31 +68,28 @@ namespace OpticalFlow
             //GUI.color = Color.red;
             //GUI.contentColor = Color.red;
             Flowing();
-            if (left)
-            {
+            if (left) {
                 GUI.Label(new Rect(250, 20, 600, 600), "LEFT");
+                go.transform.position -= (new Vector3(-0.01f, 0, 0));
             }
-            if (right)
-            {
+            if (right) {
                 GUI.Label(new Rect(250, 60, 600, 600), "RIGHT");
+                go.transform.position -= (new Vector3(0.01f, 0, 0));
             }
 
         }
 
         #endregion
 
-        public static void resetMotion()
-        {
+        public static void resetMotion() {
             // quick setup for movement
-            for (int i = 0; i < R.Length; i++)
-            {
+            for (int i = 0; i < R.Length; i++) {
                 R[i] = 0;
                 G[i] = 0;
             }
         }
 
-        protected void Setup(int width, int height)
-        {
+        protected void Setup(int width, int height) {
             resetMotion();
             prevFrame = new RenderTexture(width, height, 0);
             prevFrame.format = RenderTextureFormat.ARGBFloat;
@@ -122,53 +111,45 @@ namespace OpticalFlow
         /// Returns 0 if not consistent, 1 if consistent left, 2 if consistent right
         /// </summary>
         /// <returns></returns>
-        protected void Flowing()
-        {
-            bool r = true;
-            for (int i = 0; i < R.Length; i++)
-            {
-                if (R[i] <= G[i])
-                    r = false;
+        protected void Flowing() {
+            int red = 0;
+            for (int i = 0; i < R.Length; i++) {
+                if (R[i]!=0)
+                    if (R[i] > G[i])
+                        red++;
+            }
+            
+            int green = 0;
+            for (int i = 0; i < G.Length; i++) {
+                if (G[i] != 0)
+                    if (G[i] > R[i])
+                        green++;
             }
 
-            bool g = true;
-            for (int i = 0; i < G.Length; i++)
-            {
-                if (G[i] <= R[i])
-                    g = false;
-            }
+            bool usingWave = GameObject.Find("UseMove").GetComponent<Toggle>().isOn;
 
-            if (Time.realtimeSinceStartup - lastMove > cooldown)
-            {
-                if (g)
-                {
+            if (Time.realtimeSinceStartup - lastMove > cooldown) {
+                if (green > 13) {
                     resetMotion();
                     left = true;
-                    print("LEFT: Running in background");
+                    print("LEFT: ");
                     lastMove = Time.realtimeSinceStartup;
-                }
-                else
-                {
+                } else {
                     left = false;
                 }
-                if (r)
-                {
+                if (red > 13) {
                     resetMotion();
                     right = true;
-                    print("RIGHT: Running in background");
+                    print("RIGHT: ");
                     lastMove = Time.realtimeSinceStartup;
-                }
-                else
-                {
+                } else {
                     right = false;
                 }
             }
         }
 
-        public void Calculate(Texture current)
-        {
-            if (prevFrame == null)
-            {
+        public void Calculate(Texture current) {
+            if (prevFrame == null) {
                 Setup(current.width, current.height);
                 Graphics.Blit(current, prevFrame);
             }
@@ -187,53 +168,51 @@ namespace OpticalFlow
             //Blur(downSampled, blurIterations);
             // Graphics.Blit(downSampled, destination, flowMaterial, (int)Pass.Visualize);
             Graphics.Blit(downSampled, resultBuffer);
-            Texture2D texture = new Texture2D(resultBuffer.width, resultBuffer.height, TextureFormat.RGB24, false);
 
-            Rect rectReadPicture = new Rect(0, 0, resultBuffer.width, resultBuffer.height);
 
-            RenderTexture.active = resultBuffer;
 
-            // Read pixels
-            texture.ReadPixels(rectReadPicture, 0, 0);
-            texture.Apply();
+            // Whole optical flow thingy
+            if (Input.acceleration.x < 0.2 || Input.acceleration.y < 0.2) {
+                Texture2D texture = new Texture2D(resultBuffer.width, resultBuffer.height, TextureFormat.RGB24, false);
 
-            RenderTexture.active = null; // added to avoid errors 
+                Rect rectReadPicture = new Rect(0, 0, resultBuffer.width, resultBuffer.height);
 
-            Color32[] temp = texture.GetPixels32();
+                RenderTexture.active = resultBuffer;
 
-            for (int i = R.Length - 2; i >= 0; i--)
-            {
-                R[i + 1] = R[i];
-                G[i + 1] = G[i];
-            }
-            R[0] = 0;
-            G[0] = 0;
-            for (int i = 0; i < temp.Length; i += 1)
-            {
+                texture.ReadPixels(rectReadPicture, 0, 0);
+                texture.Apply();
 
-                if (temp[i].r > temp[i].g + 10 && temp[i].r > 20)
-                {
-                    R[0]++;
+                RenderTexture.active = null; // added to avoid errors 
+
+                Color32[] temp = texture.GetPixels32();
+
+                for (int i = R.Length - 2; i >= 0; i--) {
+                    R[i + 1] = R[i];
+                    G[i + 1] = G[i];
                 }
-                else if (temp[i].g > temp[i].r + 10 && temp[i].g > 20)
-                {
-                    G[0]++;
-                }
-            }
-            print(R[0] + " vs " + G[0]);
-            
+                R[0] = 0;
+                G[0] = 0;
+                for (int i = 0; i < temp.Length; i += 1) {
 
-            //RenderTexture.ReleaseTemporary(downSampled);
+                    if (temp[i].r*0.3 > temp[i].g && temp[i].r > 30) {
+                        R[0]++;
+                    } else if (temp[i].g*0.3 > temp[i].r && temp[i].g > 30) {
+                        G[0]++;
+                    }
+                }
+                print(R[0] + " vs " + G[0]);
+
+
+                //RenderTexture.ReleaseTemporary(downSampled);
+            }
         }
 
-        RenderTexture DownSample(RenderTexture source, int lod)
-        {
+        RenderTexture DownSample(RenderTexture source, int lod) {
             var dst = RenderTexture.GetTemporary(source.width, source.height, 0, source.format);
             source.filterMode = FilterMode.Bilinear;
             Graphics.Blit(source, dst);
 
-            for (var i = 0; i < lod; i++)
-            {
+            for (var i = 0; i < lod; i++) {
                 var tmp = RenderTexture.GetTemporary(dst.width >> 1, dst.height >> 1, 0, dst.format);
                 dst.filterMode = FilterMode.Bilinear;
                 Graphics.Blit(dst, tmp, flowMaterial, (int)Pass.DownSample);
@@ -244,17 +223,14 @@ namespace OpticalFlow
             return dst;
         }
 
-        void Blur(RenderTexture source, int iterations)
-        {
+        void Blur(RenderTexture source, int iterations) {
             var tmp0 = RenderTexture.GetTemporary(source.width, source.height, 0, source.format);
             var tmp1 = RenderTexture.GetTemporary(source.width, source.height, 0, source.format);
             var iters = Mathf.Clamp(iterations, 0, 10);
 
             Graphics.Blit(source, tmp0);
-            for (var i = 0; i < iters; i++)
-            {
-                for (var pass = 2; pass < 4; pass++)
-                {
+            for (var i = 0; i < iters; i++) {
+                for (var pass = 2; pass < 4; pass++) {
                     tmp1.DiscardContents();
                     tmp0.filterMode = FilterMode.Bilinear;
                     Graphics.Blit(tmp0, tmp1, flowMaterial, pass);
@@ -269,8 +245,7 @@ namespace OpticalFlow
             RenderTexture.ReleaseTemporary(tmp1);
         }
 
-        protected RenderTexture CreateBuffer(int width, int height)
-        {
+        protected RenderTexture CreateBuffer(int width, int height) {
             var rt = new RenderTexture(width, height, 0);
             rt.format = RenderTextureFormat.ARGBFloat;
             rt.wrapMode = TextureWrapMode.Repeat;
