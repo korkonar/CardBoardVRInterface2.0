@@ -10679,6 +10679,7 @@ GameObject:
   - component: {fileID: 509703761}
   - component: {fileID: 509703760}
   - component: {fileID: 509703763}
+  - component: {fileID: 509703764}
   m_Layer: 5
   m_Name: Right
   m_TagString: Untagged
@@ -10798,6 +10799,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scrollRectScript: {fileID: 1387402455}
   isRightButton: 1
+--- !u!114 &509703764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 509703758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fc06990f95ff6d6c9366edb202aa706, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 907292809}
 --- !u!1 &511001004
 GameObject:
   m_ObjectHideFlags: 0
@@ -15079,6 +15093,7 @@ GameObject:
   - component: {fileID: 707673543}
   - component: {fileID: 707673542}
   - component: {fileID: 707673545}
+  - component: {fileID: 707673546}
   m_Layer: 5
   m_Name: Left
   m_TagString: Untagged
@@ -15198,6 +15213,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scrollRectScript: {fileID: 1387402455}
   isRightButton: 0
+--- !u!114 &707673546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 707673540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fc06990f95ff6d6c9366edb202aa706, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 907292809}
 --- !u!1 &726518187
 GameObject:
   m_ObjectHideFlags: 0

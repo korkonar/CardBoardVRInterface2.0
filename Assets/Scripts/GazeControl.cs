@@ -11,6 +11,8 @@ public class GazeControl : MonoBehaviour
 	bool gvrStatus;
 	float gvrTimer;
     Button but;
+    string butName;
+    ScrollRectScript menuScroll;
 
     // Start is called before the first frame update
     void Start()
@@ -25,13 +27,33 @@ public class GazeControl : MonoBehaviour
         	gvrTimer += Time.deltaTime;
         	imgGaze.fillAmount = gvrTimer / totalTime;
             if (imgGaze.fillAmount == 1){
-                but.onClick.Invoke();
+                buttonClick();
             }
         }
     }
 
-    public void GVROn(Button b){
+    void buttonClick() {
+        if (butName == "Left") {
+            gvrTimer = 0;
+            imgGaze.fillAmount = 0;
+            menuScroll.ButtonLeftIsPressed();
+            return;
+        }
+        if (butName == "Right") {
+            gvrTimer = 0;
+            imgGaze.fillAmount = 0;
+            menuScroll.ButtonRightIsPressed();
+            return;
+        }
+        but.onClick.Invoke();
+    }
+
+    public void GVROn(Button b, string buttonName, ScrollRectScript menu){
+        gvrTimer = 0;
+        imgGaze.fillAmount = 0;
         but = b;
+        butName = buttonName;
+        menuScroll = menu;
     	gvrStatus = true;
     }
 

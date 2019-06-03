@@ -10,10 +10,21 @@ public class GazeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     //Detect if the Cursor starts to pass over the GameObject
     public void OnPointerEnter(PointerEventData pointerEventData)
     {
-        //Output to console the GameObject's name and the following message
-        Debug.Log("Cursor Entering " + gameObject.GetComponent<Button>() + " GameObject");
+    	ScrollRectScript menu = null;
+    	string buttonName = null;
+        //Check if it's a left or right button
+        foreach (Transform child in gameObject.transform.parent.gameObject.transform) {
+      		//child is your child transform
+      		//Debug.Log("Cursor Entering " + child.gameObject.name + " GameObject");
+      		if (child.gameObject.name == "ScrollRect"){
+      			Debug.Log("find ScrollRect " + gameObject.name);
+      			buttonName = gameObject.name;
+      			menu = child.gameObject.GetComponent(typeof(ScrollRectScript)) as ScrollRectScript;
+      			//menu.ButtonLeftIsPressed();
+      		}
+    	}
         //gameObject.GetComponent<Button>().onClick.Invoke();
-        player.GVROn(gameObject.GetComponent<Button>());
+        player.GVROn(gameObject.GetComponent<Button>(), buttonName, menu);
     }
 
     //Detect when Cursor leaves the GameObject
