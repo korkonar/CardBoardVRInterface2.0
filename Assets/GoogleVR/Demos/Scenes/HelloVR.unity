@@ -2283,6 +2283,7 @@ GameObject:
   - component: {fileID: 707673543}
   - component: {fileID: 707673542}
   - component: {fileID: 707673545}
+  - component: {fileID: 707673546}
   m_Layer: 5
   m_Name: Left
   m_TagString: Untagged
@@ -2402,6 +2403,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scrollRectScript: {fileID: 1387402455}
   isRightButton: 0
+--- !u!114 &707673546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 707673540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e809aadaf00e2ae289a8cfaaac28eab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 907292809}
 --- !u!1 &711977997
 GameObject:
   m_ObjectHideFlags: 0
@@ -6588,6 +6602,7 @@ GameObject:
   - component: {fileID: 1602857778}
   - component: {fileID: 1602857777}
   - component: {fileID: 1602857776}
+  - component: {fileID: 1602857779}
   m_Layer: 5
   m_Name: Back
   m_TagString: Untagged
@@ -6704,6 +6719,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1602857774}
   m_CullTransparentMesh: 0
+--- !u!114 &1602857779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1602857774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e809aadaf00e2ae289a8cfaaac28eab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 907292809}
 --- !u!1 &1635936513
 GameObject:
   m_ObjectHideFlags: 0
@@ -7628,6 +7656,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 662097260}
     m_Modifications:
+    - target: {fileID: 4232310664417793141, guid: 75270a8162f05368494a7841791f91b2,
+        type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 907292809}
     - target: {fileID: 6202105222619890932, guid: 75270a8162f05368494a7841791f91b2,
         type: 3}
       propertyPath: m_Name
@@ -7739,11 +7772,6 @@ PrefabInstance:
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6202105222619890943, guid: 75270a8162f05368494a7841791f91b2,
-        type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 907292809}
-    - target: {fileID: 4232310664417793141, guid: 75270a8162f05368494a7841791f91b2,
         type: 3}
       propertyPath: player
       value: 
