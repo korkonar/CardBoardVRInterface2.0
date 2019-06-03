@@ -7,12 +7,12 @@ using UnityEditor;
 public class UIManager : MonoBehaviour
 {
     private float timeOfAction;
-    public string action;
+    public string interAction;
     private bool timer = false;
 
     public JsonData data;
 
-    public string path;
+    private string path;
 
     private void Start()
     {
@@ -38,6 +38,11 @@ public class UIManager : MonoBehaviour
         {
             timeOfAction += Time.deltaTime;
         }
+    }
+
+    public void setInterAction(string checkedAction)
+    {
+        interAction = checkedAction;
     }
 
     //public void DisableFirstToSecond(Animator anim)
@@ -95,13 +100,16 @@ public class UIManager : MonoBehaviour
         timer = true;
     }
 
-    public void EndTimer()
+    public void EndTimer(string action)
     {
-        timer = false;
-        data = new JsonData(action, timeOfAction);
-        SerializeData();
-        DeserializeData();
-        //WriteString(action, timeOfAction);
+        if (action == interAction)
+        {
+            timer = false;
+            data = new JsonData(action, timeOfAction);
+            SerializeData();
+            DeserializeData();
+            //WriteString(action, timeOfAction);
+        }
     }
 
     //static void WriteString(string action, float timeOfAction)
