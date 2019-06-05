@@ -8,11 +8,14 @@ public class ScrollRectScript : MonoBehaviour
     private ScrollRect scrollRect;
     private bool mouseDown, buttonRight, buttonLeft;
     
-    public float jumpSize;
+    //public float jumpSize;
+    private float jumpStep, jumpSize;
 
     // Start is called before the first frame update
     void Start()
     {
+        jumpSize = 210f / (this.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta.x - 500f);
+        jumpStep = jumpSize / 8.0f;
         scrollRect = GetComponent<ScrollRect>();
     }
 
@@ -62,18 +65,18 @@ public class ScrollRectScript : MonoBehaviour
 
     private IEnumerator ScrollAnimationLeft()
     {
-        for (float f = 0.0f; f < jumpSize; f += 0.025f)
+        for (float f = 0.0f; f < jumpSize; f += jumpStep)
         {
-            scrollRect.horizontalNormalizedPosition -= 0.025f;
+            scrollRect.horizontalNormalizedPosition -= jumpStep;
             yield return null;
         }
     }
 
     private IEnumerator ScrollAnimationRight()
     {
-        for (float f = 0.0f; f < jumpSize; f += 0.025f)
+        for (float f = 0.0f; f < jumpSize; f += jumpStep)
         {
-            scrollRect.horizontalNormalizedPosition += 0.025f;
+            scrollRect.horizontalNormalizedPosition += jumpStep;
             yield return null;
         }
     }

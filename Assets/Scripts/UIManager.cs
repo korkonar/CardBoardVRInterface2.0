@@ -1,21 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.IO;
 using UnityEditor;
 
 public class UIManager : MonoBehaviour
 {
     private float timeOfAction;
-    public string action;
+    public string interAction;
     private bool timer = false;
 
-    public JsonData data;
+    //public JsonData data;
+    private string data;
 
-    public string path;
+    private string path;
 
     private void Start()
     {
+        interAction = "Stare";
         if (!PlayerPrefs.HasKey("userID"))
         {
             PlayerPrefs.SetInt("userID", 1);
@@ -25,11 +28,13 @@ public class UIManager : MonoBehaviour
             PlayerPrefs.SetInt("userID", PlayerPrefs.GetInt("userID") + 1);
         }
 
-        data = new JsonData("User ID", PlayerPrefs.GetInt("userID"));
+        //data = new JsonData("User ID", PlayerPrefs.GetInt("userID"));
+        data = "User ID:" + PlayerPrefs.GetInt("userID") + "\n";
 
         path = Path.Combine(Application.persistentDataPath, "data.json");
-        SerializeData();
-        DeserializeData();
+        Debug.Log(data);
+        AppendData();
+        //DeserializeData();
     }
 
     private void Update()
@@ -38,6 +43,11 @@ public class UIManager : MonoBehaviour
         {
             timeOfAction += Time.deltaTime;
         }
+    }
+
+    public void setInterAction(string checkedAction)
+    {
+        interAction = checkedAction;
     }
 
     //public void DisableFirstToSecond(Animator anim)
@@ -95,13 +105,38 @@ public class UIManager : MonoBehaviour
         timer = true;
     }
 
-    public void EndTimer()
+    public void EndTimer(string action)
     {
-        timer = false;
-        data = new JsonData(action, timeOfAction);
-        SerializeData();
-        DeserializeData();
-        //WriteString(action, timeOfAction);
+        if (action == interAction)
+        {
+            timer = false;
+            //data = new JsonData(action, timeOfAction);
+            data = "Action: " + action + " Time: " + timeOfAction + "\n";
+            Debug.Log(data);
+            AppendData();
+            //DeserializeData();
+            //WriteString(action, timeOfAction);
+        }
+    }
+
+     public void DisableToggles() {
+        GameObject.Find("UseClap").SetActive(false);
+        GameObject.Find("UseMove").SetActive(false);
+    }
+
+    public void OnToggle() {
+        //find value of the toggles
+        bool clapValue = GameObject.Find("UseClap").GetComponent<Toggle>().isOn;
+
+        //when more toggles exist, will need to change this to check if they are also off. 
+        //Potentially need to make it so that only one togge can be on at a time.
+        if (!clapValue) {
+            interAction = "Stare";
+            GameObject.Find("Player").GetComponent<GazeControl>().usingGaze = true;
+        } else {
+            interAction = "Clap";
+            GameObject.Find("Player").GetComponent<GazeControl>().usingGaze = false;
+        }
     }
 
     //static void WriteString(string action, float timeOfAction)
@@ -121,22 +156,21 @@ public class UIManager : MonoBehaviour
     //    //Debug.Log(asset.text);
     //}
 
-    public void SerializeData()
+    public void AppendData()
     {
-        string jsonDataString = JsonUtility.ToJson(data, true);
+        //string jsonDataString = JsonUtility.ToJson(data, true);
 
-        File.WriteAllText(path, jsonDataString);
-
-        Debug.Log(jsonDataString);
+        File.AppendAllText(path, data);
     }
 
     public void DeserializeData()
     {
-        string loadedJsonDataString = File.ReadAllText(path);
+        string loadedData = File.ReadAllText(path);
 
-        data = JsonUtility.FromJson<JsonData>(loadedJsonDataString);
+        //data = JsonUtility.FromJson<JsonData>(loadedJsonDataString);
 
-        Debug.Log("action: " + data.action.ToString() + " | time: " + data.time);
+        //Debug.Log("action: " + data.action.ToString() + " | time: " + data.time);
+        Debug.Log(loadedData);
      }
 }
 

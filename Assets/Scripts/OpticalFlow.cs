@@ -162,15 +162,15 @@ namespace OpticalFlow {
                 Setup(current.width, current.height);
                 Graphics.Blit(current, prevFrame);
             }
-            GameObject.Find("LabelRed").GetComponent<Text>().text = "Red: " + R[0] + ", " + R[1] + ", " + R[2] + ", " + R[3] + ", " + R[4] + ", " + R[5] + ", " + R[6];
-            GameObject.Find("LabelGreen").GetComponent<Text>().text = "Green: " + G[0] + ", " + G[1] + ", " + G[2] + ", " + G[3] + ", " + G[4] + ", " + G[5] + ", " + G[6];
+            //GameObject.Find("LabelRed").GetComponent<Text>().text = "Red: " + R[0] + ", " + R[1] + ", " + R[2] + ", " + R[3] + ", " + R[4] + ", " + R[5] + ", " + R[6];
+            //GameObject.Find("LabelGreen").GetComponent<Text>().text = "Green: " + G[0] + ", " + G[1] + ", " + G[2] + ", " + G[3] + ", " + G[4] + ", " + G[5] + ", " + G[6];
 
             xSinceLast = Math.Abs(Input.acceleration.x - lastX);
             ySinceLast = Math.Abs(Input.acceleration.y - lastY);
             lastX = Input.acceleration.x;
             lastY = Input.acceleration.y;
 
-            GameObject.Find("LabelAccel").GetComponent<Text>().text = "AccelX: " + xSinceLast + ", " + ySinceLast;
+            //GameObject.Find("LabelAccel").GetComponent<Text>().text = "AccelX: " + xSinceLast + ", " + ySinceLast;
 
             flowMaterial.SetTexture("_PrevTex", prevFrame);
             flowMaterial.SetFloat("_Ratio", 1f * Screen.height / Screen.width);
