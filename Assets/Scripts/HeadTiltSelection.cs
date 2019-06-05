@@ -51,7 +51,12 @@ public class HeadTiltSelection : MonoBehaviour
             else if (reseted && Input.acceleration.z - previousAcc.z <= -0.2)
             {
                 debug.text = "Negative Selection";
-                selected.GetComponent<Button>().onClick.Invoke();
+                foreach(GameObject go in GameObject.FindGameObjectsWithTag("Back"))
+                {
+                    if (go.activeSelf)
+                    go.GetComponent<Button>().onClick.Invoke();
+                }
+                //selected.GetComponent<Button>().onClick.Invoke();
                 positiveAction = false;
                 actionPerformed = true;
             }
