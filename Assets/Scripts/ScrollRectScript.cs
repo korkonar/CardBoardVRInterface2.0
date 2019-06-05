@@ -14,8 +14,8 @@ public class ScrollRectScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        jumpSize = 381 / this.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta.x;
-        jumpStep = jumpSize / 12;
+        jumpSize = 210f / (this.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta.x - 500f);
+        jumpStep = jumpSize / 8.0f;
         scrollRect = GetComponent<ScrollRect>();
     }
 
