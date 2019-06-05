@@ -77,18 +77,11 @@ namespace OpticalFlow {
             Flowing();
             if (left) {
                 GUI.Label(new Rect(250, 20, 600, 600), "LEFT");
-                var objects = Resources.FindObjectsOfTypeAll<GameObject>().Where(obj => obj.name == "ScrollRect");
-                foreach (var GameObject in objects) {
-                    StartCoroutine(GameObject.GetComponent<ScrollRectScript>().ScrollAnimationLeft());
-                }
                 
             }
             if (right) {
                 GUI.Label(new Rect(250, 60, 600, 600), "RIGHT");
-                var objects = Resources.FindObjectsOfTypeAll<GameObject>().Where(obj => obj.name == "ScrollRect");
-                foreach (var GameObject in objects) {
-                    StartCoroutine(GameObject.GetComponent<ScrollRectScript>().ScrollAnimationRight());
-                }
+
             }
 
         }
@@ -140,13 +133,16 @@ namespace OpticalFlow {
                         green++;
             }
 
-            bool usingWave = GameObject.Find("UseWave").GetComponent<Toggle>().isOn;
-
-            if (Time.realtimeSinceStartup - lastMove > cooldown && usingWave) {
+            if (Time.realtimeSinceStartup - lastMove > cooldown && GameObject.Find("UIManager").GetComponent<UIManager>().interAction == "Wave") {
                 
                 if (red > 5) {
                     resetMotion();
                     left = true;
+                    var objects = Resources.FindObjectsOfTypeAll<GameObject>().Where(obj => obj.name == "ScrollRect");
+                    foreach (var GameObject in objects) {
+                        
+                        StartCoroutine(GameObject.GetComponent<ScrollRectScript>().ScrollAnimationLeft());
+                    }
                     print("LEFT: ");
                     lastMove = Time.realtimeSinceStartup;
                 } else {
@@ -155,6 +151,11 @@ namespace OpticalFlow {
                 if (green > 5) {
                     resetMotion();
                     right = true;
+                    var objects = Resources.FindObjectsOfTypeAll<GameObject>().Where(obj => obj.name == "ScrollRect");
+                    foreach (var GameObject in objects) {
+                        StartCoroutine(GameObject.GetComponent<ScrollRectScript>().ScrollAnimationRight());
+
+                    }
                     print("RIGHT: ");
                     lastMove = Time.realtimeSinceStartup;
                 } else {
@@ -226,7 +227,7 @@ namespace OpticalFlow {
                         G[0]++;
                     }
                 }
-                print(R[0] + " vs " + G[0]);
+                //print(R[0] + " vs " + G[0]);
 
 
                 //RenderTexture.ReleaseTemporary(downSampled);

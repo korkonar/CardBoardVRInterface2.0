@@ -9,7 +9,7 @@ public class ScrollRectScript : MonoBehaviour
     private bool mouseDown, buttonRight, buttonLeft;
     
     //public float jumpSize;
-    private float jumpStep, jumpSize;
+    public float jumpStep, jumpSize;
 
     // Start is called before the first frame update
     void Start()
