@@ -7,15 +7,17 @@ using UnityEditor;
 public class UIManager : MonoBehaviour
 {
     private float timeOfAction;
-    public string interAction;
+    private string interAction;
     private bool timer = false;
 
-    public JsonData data;
+    //public JsonData data;
+    private string data;
 
     private string path;
 
     private void Start()
     {
+        interAction = "Stare";
         if (!PlayerPrefs.HasKey("userID"))
         {
             PlayerPrefs.SetInt("userID", 1);
@@ -25,11 +27,13 @@ public class UIManager : MonoBehaviour
             PlayerPrefs.SetInt("userID", PlayerPrefs.GetInt("userID") + 1);
         }
 
-        data = new JsonData("User ID", PlayerPrefs.GetInt("userID"));
+        //data = new JsonData("User ID", PlayerPrefs.GetInt("userID"));
+        data = "User ID:" + PlayerPrefs.GetInt("userID") + "\n";
 
         path = Path.Combine(Application.persistentDataPath, "data.json");
-        SerializeData();
-        DeserializeData();
+        Debug.Log(data);
+        AppendData();
+        //DeserializeData();
     }
 
     private void Update()
@@ -105,9 +109,11 @@ public class UIManager : MonoBehaviour
         if (action == interAction)
         {
             timer = false;
-            data = new JsonData(action, timeOfAction);
-            SerializeData();
-            DeserializeData();
+            //data = new JsonData(action, timeOfAction);
+            data = "Action: " + action + " Time: " + timeOfAction + "\n";
+            Debug.Log(data);
+            AppendData();
+            //DeserializeData();
             //WriteString(action, timeOfAction);
         }
     }
@@ -129,22 +135,21 @@ public class UIManager : MonoBehaviour
     //    //Debug.Log(asset.text);
     //}
 
-    public void SerializeData()
+    public void AppendData()
     {
-        string jsonDataString = JsonUtility.ToJson(data, true);
+        //string jsonDataString = JsonUtility.ToJson(data, true);
 
-        File.WriteAllText(path, jsonDataString);
-
-        Debug.Log(jsonDataString);
+        File.AppendAllText(path, data);
     }
 
     public void DeserializeData()
     {
-        string loadedJsonDataString = File.ReadAllText(path);
+        string loadedData = File.ReadAllText(path);
 
-        data = JsonUtility.FromJson<JsonData>(loadedJsonDataString);
+        //data = JsonUtility.FromJson<JsonData>(loadedJsonDataString);
 
-        Debug.Log("action: " + data.action.ToString() + " | time: " + data.time);
+        //Debug.Log("action: " + data.action.ToString() + " | time: " + data.time);
+        Debug.Log(loadedData);
      }
 }
 
