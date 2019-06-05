@@ -37,11 +37,9 @@ public class GvrPointerInputModuleImpl
     //clapping variables
     public bool usingClapping = true;
     private int coolDown = 0;
-    private int doubleClapCooldown = 0;
+    private int delay = 0;
     private float i;
     private float prevI = 0;
-    private bool spike1 = false;
-    private bool spike2 = false;
     private AudioClip microphoneInput = null;
 
     // Active state
@@ -169,7 +167,11 @@ public class GvrPointerInputModuleImpl
             }
         }
 
-        usingClapping = GameObject.Find("UseClap").GetComponent<Toggle>().isOn;
+        if(GameObject.Find("UIManager").GetComponent<UIManager>().interAction == "Clap") {
+            usingClapping = true;
+        } else {
+            usingClapping = false;
+        }
 
         // If the pointer is inactive, make sure it is exited if necessary.
         if (!IsPointerActiveAndAvailable())
@@ -666,10 +668,12 @@ public class GvrPointerInputModuleImpl
 
     private bool clapListen() {
         //get mic volume
-        coolDown--;
-        if (doubleClapCooldown > 0) {
-            doubleClapCooldown--;
+        if(delay > 0) {
+            delay--;
+            return false;
         }
+
+        coolDown--;
         if (coolDown > 0) {
             int dec = 32;
             float[] waveData = new float[dec];
@@ -709,32 +713,12 @@ public class GvrPointerInputModuleImpl
             i = i / 10;
             GameObject.Find("Mic").GetComponent<UnityEngine.UI.Text>().text = i.ToString();
             //Debug.Log(i);
-            if (Mathf.Abs(i - prevI) < 0.05f) {
-                if (spike2) {
-                    doubleClapCooldown = 60;
-                }
-                spike1 = false;
-                spike2 = false;
+            if (Mathf.Abs(i - prevI) < 0.07f) {
                 GameObject.Find("Clap").GetComponent<UnityEngine.UI.Text>().text = "";
-            }
-            else if (!spike1) {
-                spike1 = true;
-            }
-            else {
-                if (doubleClapCooldown > 0) {
-                    spike2 = false;
-                    spike1 = false;
-                    GameObject.Find("Mic").GetComponent<UnityEngine.UI.Text>().text = "double clap";
-                    Debug.Log("CLAP");
-                    return true;
-                }
-                else {
-                    spike2 = false;
-                    spike1 = false;
-                    GameObject.Find("Mic").GetComponent<UnityEngine.UI.Text>().text = "clap";
-                    Debug.Log("CLAP");
-                    return true;
-                }
+            }else {
+                delay = 60;
+                GameObject.Find("Mic").GetComponent<UnityEngine.UI.Text>().text = "clap";
+                return true;
             }
 
             prevI = i;

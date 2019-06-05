@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.IO;
 using UnityEditor;
 
 public class UIManager : MonoBehaviour
 {
     private float timeOfAction;
-    private string interAction;
+    public string interAction;
     private bool timer = false;
 
     //public JsonData data;
@@ -115,6 +116,25 @@ public class UIManager : MonoBehaviour
             AppendData();
             //DeserializeData();
             //WriteString(action, timeOfAction);
+        }
+    }
+
+     public void DisableToggles() {
+        GameObject.Find("UseClap").SetActive(false);
+    }
+
+    public void OnToggle() {
+        //find value of the toggles
+        bool clapValue = GameObject.Find("UseClap").GetComponent<Toggle>().isOn;
+
+        //when more toggles exist, will need to change this to check if they are also off. 
+        //Potentially need to make it so that only one togge can be on at a time.
+        if (!clapValue) {
+            interAction = "Stare";
+            GameObject.Find("Player").GetComponent<GazeControl>().usingGaze = true;
+        } else {
+            interAction = "Clap";
+            GameObject.Find("Player").GetComponent<GazeControl>().usingGaze = false;
         }
     }
 
