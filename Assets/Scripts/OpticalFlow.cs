@@ -1,15 +1,21 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace OpticalFlow {
 
     public class OpticalFlow : MonoBehaviour {
-        public static int[] R = new int[15];
-        public static int[] G = new int[15];
+        public static int[] R = new int[7];
+        public static int[] G = new int[7];
         bool left = false;
         bool right = false;
         float cooldown = 1f;
         float lastMove;
+
+        float lastX = 0;
+        float lastY = 0;
+        float xSinceLast = 1f;
+        float ySinceLast = 1f;
 
         protected enum Pass {
             Flow = 0,
@@ -114,22 +120,23 @@ namespace OpticalFlow {
         protected void Flowing() {
             int red = 0;
             for (int i = 0; i < R.Length; i++) {
-                if (R[i]!=0)
-                    if (R[i] > G[i])
+                if (R[i]>100)
+                    if (R[i] > 2*G[i])
                         red++;
             }
             
             int green = 0;
             for (int i = 0; i < G.Length; i++) {
-                if (G[i] != 0)
-                    if (G[i] > R[i])
+                if (G[i] > 100)
+                    if (G[i] > 2*R[i])
                         green++;
             }
 
             bool usingWave = GameObject.Find("UseMove").GetComponent<Toggle>().isOn;
 
-            if (Time.realtimeSinceStartup - lastMove > cooldown) {
-                if (green > 13) {
+            if (Time.realtimeSinceStartup - lastMove > cooldown && usingWave) {
+                
+                if (red > 5) {
                     resetMotion();
                     left = true;
                     print("LEFT: ");
@@ -137,7 +144,7 @@ namespace OpticalFlow {
                 } else {
                     left = false;
                 }
-                if (red > 13) {
+                if (green > 5) {
                     resetMotion();
                     right = true;
                     print("RIGHT: ");
@@ -145,6 +152,8 @@ namespace OpticalFlow {
                 } else {
                     right = false;
                 }
+            } else {
+                resetMotion();
             }
         }
 
@@ -153,6 +162,15 @@ namespace OpticalFlow {
                 Setup(current.width, current.height);
                 Graphics.Blit(current, prevFrame);
             }
+            GameObject.Find("LabelRed").GetComponent<Text>().text = "Red: " + R[0] + ", " + R[1] + ", " + R[2] + ", " + R[3] + ", " + R[4] + ", " + R[5] + ", " + R[6];
+            GameObject.Find("LabelGreen").GetComponent<Text>().text = "Green: " + G[0] + ", " + G[1] + ", " + G[2] + ", " + G[3] + ", " + G[4] + ", " + G[5] + ", " + G[6];
+
+            xSinceLast = Math.Abs(Input.acceleration.x - lastX);
+            ySinceLast = Math.Abs(Input.acceleration.y - lastY);
+            lastX = Input.acceleration.x;
+            lastY = Input.acceleration.y;
+
+            GameObject.Find("LabelAccel").GetComponent<Text>().text = "AccelX: " + xSinceLast + ", " + ySinceLast;
 
             flowMaterial.SetTexture("_PrevTex", prevFrame);
             flowMaterial.SetFloat("_Ratio", 1f * Screen.height / Screen.width);
@@ -172,7 +190,7 @@ namespace OpticalFlow {
 
 
             // Whole optical flow thingy
-            if (Input.acceleration.x < 0.2 || Input.acceleration.y < 0.2) {
+            if (xSinceLast <= 0.04 || ySinceLast <= 0.04) {
                 Texture2D texture = new Texture2D(resultBuffer.width, resultBuffer.height, TextureFormat.RGB24, false);
 
                 Rect rectReadPicture = new Rect(0, 0, resultBuffer.width, resultBuffer.height);
@@ -204,6 +222,8 @@ namespace OpticalFlow {
 
 
                 //RenderTexture.ReleaseTemporary(downSampled);
+            } else {
+                resetMotion();
             }
         }
 
