@@ -44,6 +44,9 @@ public class GvrPointerInputModuleImpl
     private bool spike2 = false;
     private AudioClip microphoneInput = null;
 
+    //HeadTilt variables
+    bool usingHeadTilt;
+
     // Active state
     private bool isActive = false;
 
@@ -170,6 +173,7 @@ public class GvrPointerInputModuleImpl
         }
 
         usingClapping = GameObject.Find("UseClap").GetComponent<Toggle>().isOn;
+        usingHeadTilt = GameObject.Find("UseHeadTilt").GetComponent<Toggle>().isOn;
 
         // If the pointer is inactive, make sure it is exited if necessary.
         if (!IsPointerActiveAndAvailable())
@@ -190,12 +194,15 @@ public class GvrPointerInputModuleImpl
         // True if the trigger is held down.
         bool triggering = false;
 
-        if (IsPointerActiveAndAvailable() && !usingClapping)
+        if (IsPointerActiveAndAvailable() && !usingClapping && !usingHeadTilt)
         {
             triggerDown = Pointer.TriggerDown;
             triggering = Pointer.Triggering;
-        }else if (usingClapping) {
+        }else if (usingClapping && ! usingHeadTilt) {
             triggerDown = clapListen();
+        }else if (usingHeadTilt)
+        {
+
         }
 
 
