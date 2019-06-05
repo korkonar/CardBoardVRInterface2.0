@@ -170,16 +170,14 @@ public class GvrPointerInputModuleImpl
             }
         }
 
-<<<<<<< HEAD
-        usingClapping = GameObject.Find("UseClap").GetComponent<Toggle>().isOn;
-        usingHeadTilt = GameObject.Find("UseHeadTilt").GetComponent<Toggle>().isOn;
-=======
+        //usingClapping = GameObject.Find("UseClap").GetComponent<Toggle>().isOn;
+        //usingHeadTilt = GameObject.Find("UseHeadTilt").GetComponent<Toggle>().isOn;
+
         if(GameObject.Find("UIManager").GetComponent<UIManager>().interAction == "Clap") {
             usingClapping = true;
         } else {
             usingClapping = false;
         }
->>>>>>> 177f7a4b69b4b2e782bb5be3780f88b03526b2e3
 
         // If the pointer is inactive, make sure it is exited if necessary.
         if (!IsPointerActiveAndAvailable())

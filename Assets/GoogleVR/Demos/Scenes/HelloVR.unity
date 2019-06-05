@@ -26704,7 +26704,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   imgGaze: {fileID: 437114070}
   totalTime: 0
-<<<<<<< HEAD
+  gvrStatus: 0
+  usingGaze: 1
 --- !u!114 &907292810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26718,12 +26719,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: {fileID: 994893528}
-  TiltInfo: {fileID: 0}
   selected: {fileID: 0}
-=======
-  gvrStatus: 0
-  usingGaze: 1
->>>>>>> 177f7a4b69b4b2e782bb5be3780f88b03526b2e3
 --- !u!1 &908350278
 GameObject:
   m_ObjectHideFlags: 0
@@ -26843,10 +26839,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8615daa030f98f54199d9f5d049f2df5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< HEAD
-=======
   interAction: 
->>>>>>> 177f7a4b69b4b2e782bb5be3780f88b03526b2e3
 --- !u!4 &912657892
 Transform:
   m_ObjectHideFlags: 0
@@ -35939,6 +35932,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1180155582}
   - component: {fileID: 1180155583}
+  - component: {fileID: 1180155584}
   m_Layer: 0
   m_Name: UseHeadTilt
   m_TagString: Untagged
@@ -36018,12 +36012,25 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Clap
+          m_StringArgument: Tilt
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_IsOn: 0
+--- !u!114 &1180155584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180155581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fc06990f95ff6d6c9366edb202aa706, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 907292809}
 --- !u!1 &1180271024
 GameObject:
   m_ObjectHideFlags: 0
@@ -55772,6 +55779,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1783205491}
   - component: {fileID: 1783205492}
+  - component: {fileID: 1783205493}
   m_Layer: 0
   m_Name: UseClap
   m_TagString: Untagged
@@ -55844,8 +55852,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 912657891}
-        m_MethodName: OnToggle
-        m_Mode: 1
+        m_MethodName: setInterAction
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -55857,6 +55865,19 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.Toggle+ToggleEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_IsOn: 0
+--- !u!114 &1783205493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1783205490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fc06990f95ff6d6c9366edb202aa706, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 907292809}
 --- !u!1 &1799616150
 GameObject:
   m_ObjectHideFlags: 0

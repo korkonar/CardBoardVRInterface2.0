@@ -10,7 +10,7 @@ public class GazeControl : MonoBehaviour
 	public float totalTime;
 	public bool gvrStatus;
 	float gvrTimer;
-    Button but;
+    GameObject but;
     string butName;
     ScrollRectScript menuScroll;
     public bool usingGaze = true;
@@ -40,16 +40,23 @@ public class GazeControl : MonoBehaviour
             menuScroll.ButtonLeftIsPressed();
             return;
         }
-        if (butName == "Right") {
+        else if (butName == "Right") {
             gvrTimer = 0;
             imgGaze.fillAmount = 0;
             menuScroll.ButtonRightIsPressed();
             return;
         }
-        but.onClick.Invoke();
+        else if(butName == "UseClap" || butName == "UseHeadTilt")
+        {
+            gvrTimer = 0;
+            imgGaze.fillAmount = 0;
+            but.GetComponent<Toggle>().isOn = true;
+            return;
+        }
+        but.GetComponent<Button>().onClick.Invoke();
     }
 
-    public void GVROn(Button b, string buttonName, ScrollRectScript menu){
+    public void GVROn(GameObject b, string buttonName, ScrollRectScript menu){
         gvrTimer = 0;
         imgGaze.fillAmount = 0;
         but = b;

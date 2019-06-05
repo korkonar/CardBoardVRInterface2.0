@@ -12,19 +12,19 @@ public class GazeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
     	ScrollRectScript menu = null;
     	string buttonName = null;
+        buttonName = gameObject.name;
         //Check if it's a left or right button
         foreach (Transform child in gameObject.transform.parent.gameObject.transform) {
       		//child is your child transform
       		//Debug.Log("Cursor Entering " + child.gameObject.name + " GameObject");
       		if (child.gameObject.name == "ScrollRect"){
-      			Debug.Log("find ScrollRect " + gameObject.name);
-      			buttonName = gameObject.name;
+      			//Debug.Log("find ScrollRect " + gameObject.name);
       			menu = child.gameObject.GetComponent(typeof(ScrollRectScript)) as ScrollRectScript;
       			//menu.ButtonLeftIsPressed();
       		}
     	}
         //gameObject.GetComponent<Button>().onClick.Invoke();
-        player.GVROn(gameObject.GetComponent<Button>(), buttonName, menu);
+        player.GVROn(gameObject, buttonName, menu);
     }
 
     //Detect when Cursor leaves the GameObject

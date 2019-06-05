@@ -28,64 +28,69 @@ public class HeadTiltSelection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        actionPerformed = false;
-        //print(Input.acceleration);
-        //debug.transform.parent.gameObject.SetActive(true);
-        //debug.text = Input.acceleration.ToString();
-        if(!reseted && Input.acceleration.z == inicialAcc.z)
-        {
-            reseted = true;
-        }
-
-        if (reseted && Input.acceleration.z - previousAcc.z >= 0.2)
+        if (GameObject.Find("UIManager").GetComponent<UIManager>().interAction == "Tilt")
         {
 
-            debug.text = "Positive Selection";
-            selected.GetComponent<Button>().onClick.Invoke();
-            positiveAction = true;
-            actionPerformed = true;
-        }else if (reseted && Input.acceleration.z - previousAcc.z <= -0.2)
-        {
-            debug.text = "Negative Selection";
-            selected.GetComponent<Button>().onClick.Invoke();
-            positiveAction = false;
-            actionPerformed = true;
-        }
+            actionPerformed = false;
+            //print(Input.acceleration);
+            //debug.transform.parent.gameObject.SetActive(true);
+            //debug.text = Input.acceleration.ToString();
+            if (!reseted && Input.acceleration.z == inicialAcc.z)
+            {
+                reseted = true;
+            }
+
+            if (reseted && Input.acceleration.z - previousAcc.z >= 0.2)
+            {
+
+                debug.text = "Positive Selection";
+                selected.GetComponent<Button>().onClick.Invoke();
+                positiveAction = true;
+                actionPerformed = true;
+            }
+            else if (reseted && Input.acceleration.z - previousAcc.z <= -0.2)
+            {
+                debug.text = "Negative Selection";
+                selected.GetComponent<Button>().onClick.Invoke();
+                positiveAction = false;
+                actionPerformed = true;
+            }
 
             previousAcc = Input.acceleration;
+        }
     }
 
-    public bool getPAction()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            return true;
-        }
-        if (actionPerformed)
-        {
-            if (positiveAction)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public bool getNAction()
-    {
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            return true;
-        }
-        if (actionPerformed)
-        {
-            if (!positiveAction)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
+    //public bool getPAction()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.A))
+    //    {
+    //        return true;
+    //    }
+    //    if (actionPerformed)
+    //    {
+    //        if (positiveAction)
+    //        {
+    //            return true;
+    //        }
+    //    }
+    //    return false;
+    //}
+    //
+    //public bool getNAction()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.S))
+    //    {
+    //        return true;
+    //    }
+    //    if (actionPerformed)
+    //    {
+    //        if (!positiveAction)
+    //        {
+    //            return true;
+    //        }
+    //    }
+    //    return false;
+    //}
 
 
     public void setSelectedObject(GameObject obj)
@@ -103,7 +108,7 @@ public class HeadTiltSelection : MonoBehaviour
 
     IEnumerator ExecuteAfterTime(GameObject obj)
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
 
         if (selected == obj && !enter)
         {

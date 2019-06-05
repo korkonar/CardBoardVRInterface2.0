@@ -48,6 +48,18 @@ public class UIManager : MonoBehaviour
     public void setInterAction(string checkedAction)
     {
         interAction = checkedAction;
+        if (interAction == "Clap")
+        {
+            GameObject.Find("Player").GetComponent<GazeControl>().usingGaze = false;
+        }
+        else if(interAction == "Tilt")
+        {
+            GameObject.Find("Player").GetComponent<GazeControl>().usingGaze = false;
+        }
+        else
+        {
+            GameObject.Find("Player").GetComponent<GazeControl>().usingGaze = true;
+        }
     }
 
     //public void DisableFirstToSecond(Animator anim)
@@ -121,6 +133,7 @@ public class UIManager : MonoBehaviour
 
      public void DisableToggles() {
         GameObject.Find("UseClap").SetActive(false);
+        GameObject.Find("UseHeadTilt").SetActive(false);
     }
 
     public void OnToggle() {
