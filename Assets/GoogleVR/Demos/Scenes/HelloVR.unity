@@ -6252,6 +6252,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 912657891}
+        m_MethodName: DisableToggles
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &229260386
@@ -26693,6 +26704,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   imgGaze: {fileID: 437114070}
   totalTime: 0
+<<<<<<< HEAD
 --- !u!114 &907292810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26708,6 +26720,10 @@ MonoBehaviour:
   debug: {fileID: 994893528}
   TiltInfo: {fileID: 0}
   selected: {fileID: 0}
+=======
+  gvrStatus: 0
+  usingGaze: 1
+>>>>>>> 177f7a4b69b4b2e782bb5be3780f88b03526b2e3
 --- !u!1 &908350278
 GameObject:
   m_ObjectHideFlags: 0
@@ -26827,6 +26843,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8615daa030f98f54199d9f5d049f2df5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
+=======
+  interAction: 
+>>>>>>> 177f7a4b69b4b2e782bb5be3780f88b03526b2e3
 --- !u!4 &912657892
 Transform:
   m_ObjectHideFlags: 0
@@ -55824,8 +55844,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 912657891}
-        m_MethodName: setInterAction
-        m_Mode: 5
+        m_MethodName: OnToggle
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

@@ -8,11 +8,12 @@ public class GazeControl : MonoBehaviour
 {
 	public Image imgGaze;
 	public float totalTime;
-	bool gvrStatus;
+	public bool gvrStatus;
 	float gvrTimer;
     Button but;
     string butName;
     ScrollRectScript menuScroll;
+    public bool usingGaze = true;
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +24,7 @@ public class GazeControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gvrStatus){
+        if (gvrStatus && usingGaze){
         	gvrTimer += Time.deltaTime;
         	imgGaze.fillAmount = gvrTimer / totalTime;
             if (imgGaze.fillAmount == 1){
