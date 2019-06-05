@@ -63,7 +63,7 @@ public class ScrollRectScript : MonoBehaviour
         StartCoroutine(ScrollAnimationLeft());
     }
 
-    private IEnumerator ScrollAnimationLeft()
+    public IEnumerator ScrollAnimationLeft()
     {
         for (float f = 0.0f; f < jumpSize; f += jumpStep)
         {
@@ -72,7 +72,7 @@ public class ScrollRectScript : MonoBehaviour
         }
     }
 
-    private IEnumerator ScrollAnimationRight()
+    public IEnumerator ScrollAnimationRight()
     {
         for (float f = 0.0f; f < jumpSize; f += jumpStep)
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -76,11 +77,18 @@ namespace OpticalFlow {
             Flowing();
             if (left) {
                 GUI.Label(new Rect(250, 20, 600, 600), "LEFT");
-                go.transform.position -= (new Vector3(-0.01f, 0, 0));
+                var objects = Resources.FindObjectsOfTypeAll<GameObject>().Where(obj => obj.name == "ScrollRect");
+                foreach (var GameObject in objects) {
+                    StartCoroutine(GameObject.GetComponent<ScrollRectScript>().ScrollAnimationLeft());
+                }
+                
             }
             if (right) {
                 GUI.Label(new Rect(250, 60, 600, 600), "RIGHT");
-                go.transform.position -= (new Vector3(0.01f, 0, 0));
+                var objects = Resources.FindObjectsOfTypeAll<GameObject>().Where(obj => obj.name == "ScrollRect");
+                foreach (var GameObject in objects) {
+                    StartCoroutine(GameObject.GetComponent<ScrollRectScript>().ScrollAnimationRight());
+                }
             }
 
         }
@@ -132,7 +140,7 @@ namespace OpticalFlow {
                         green++;
             }
 
-            bool usingWave = GameObject.Find("UseMove").GetComponent<Toggle>().isOn;
+            bool usingWave = GameObject.Find("UseWave").GetComponent<Toggle>().isOn;
 
             if (Time.realtimeSinceStartup - lastMove > cooldown && usingWave) {
                 

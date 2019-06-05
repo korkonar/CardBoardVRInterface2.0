@@ -121,21 +121,32 @@ public class UIManager : MonoBehaviour
 
      public void DisableToggles() {
         GameObject.Find("UseClap").SetActive(false);
-        GameObject.Find("UseMove").SetActive(false);
+        GameObject.Find("UseWave").SetActive(false);
     }
 
-    public void OnToggle() {
+    public void OnToggle(string type) {
         //find value of the toggles
-        bool clapValue = GameObject.Find("UseClap").GetComponent<Toggle>().isOn;
-
-        //when more toggles exist, will need to change this to check if they are also off. 
-        //Potentially need to make it so that only one togge can be on at a time.
-        if (!clapValue) {
-            interAction = "Stare";
-            GameObject.Find("Player").GetComponent<GazeControl>().usingGaze = true;
-        } else {
-            interAction = "Clap";
-            GameObject.Find("Player").GetComponent<GazeControl>().usingGaze = false;
+        switch (type) {
+            case "Clap":
+                if (GameObject.Find("UseClap").GetComponent<Toggle>().isOn) {
+                    GameObject.Find("UseWave").GetComponent<Toggle>().isOn = false;
+                    interAction = type;
+                    GameObject.Find("Player").GetComponent<GazeControl>().usingGaze = false;
+                } else {
+                    interAction = "Stare";
+                    GameObject.Find("Player").GetComponent<GazeControl>().usingGaze = true;
+                }
+                break;
+            case "Wave":
+                if (GameObject.Find("UseWave").GetComponent<Toggle>().isOn) {
+                    GameObject.Find("UseClap").GetComponent<Toggle>().isOn = false;
+                    interAction = type;
+                    GameObject.Find("Player").GetComponent<GazeControl>().usingGaze = true;
+                } else {
+                    interAction = "Stare";
+                    GameObject.Find("Player").GetComponent<GazeControl>().usingGaze = true;
+                }
+                break;
         }
     }
 
