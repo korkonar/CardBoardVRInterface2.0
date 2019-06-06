@@ -51628,7 +51628,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 650d0e5228349e041a04532ccd0642d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flowMaterial: {fileID: 0}
+  flowMaterial: {fileID: 2100000, guid: acef75f6d199e6a41be42372f1b2d0bb, type: 2}
   blurIterations: 0
   blurDownSample: 0
   debug: 1
@@ -51713,7 +51713,7 @@ Camera:
     m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
+  m_TargetDisplay: 1
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
