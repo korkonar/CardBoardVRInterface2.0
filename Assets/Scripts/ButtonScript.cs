@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class ButtonScript : MonoBehaviour, IPointerDownHandler
 {
     [SerializeField]
-    private ScrollRectScript scrollRectScript;
+    public ScrollRectScript scrollRectScript;
     [SerializeField]
     private bool isRightButton;
 

@@ -22,6 +22,9 @@ namespace OpticalFlow.Demo
 
         void Update ()
         {
+            if (GameObject.Find("UIManager").GetComponent<UIManager>().interAction != "Wave") {
+                return;
+            }
             if(webCamTexture != null && webCamTexture.didUpdateThisFrame)
             {
                 textureUpdateEvent.Invoke(webCamTexture);
@@ -30,6 +33,9 @@ namespace OpticalFlow.Demo
 
         void OnRenderImage(RenderTexture source, RenderTexture destination)
         {
+            if (GameObject.Find("UIManager").GetComponent<UIManager>().interAction != "Wave") {
+                return;
+            }
             Graphics.Blit(webCamTexture, destination);
         }
 

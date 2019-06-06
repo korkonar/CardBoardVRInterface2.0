@@ -155,7 +155,7 @@ public class UIManager : MonoBehaviour
                     GameObject.Find("UseClap").GetComponent<Toggle>().isOn = false;
                     GameObject.Find("UseHeadTilt").GetComponent<Toggle>().isOn = false;
                     interAction = type;
-                    GameObject.Find("Player").GetComponent<GazeControl>().usingGaze = true;
+                    GameObject.Find("Player").GetComponent<GazeControl>().usingGaze = false;
                 } else {
                     interAction = "Stare";
                     GameObject.Find("Player").GetComponent<GazeControl>().usingGaze = true;

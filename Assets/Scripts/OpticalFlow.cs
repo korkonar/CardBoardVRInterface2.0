@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace OpticalFlow {
 
     public class OpticalFlow : MonoBehaviour {
-        public static int[] R = new int[7];
-        public static int[] G = new int[7];
+        public static int[] R = new int[14];
+        public static int[] G = new int[14];
         bool left = false;
         bool right = false;
         float cooldown = 1f;
@@ -15,8 +14,10 @@ namespace OpticalFlow {
 
         float lastX = 0;
         float lastY = 0;
+        float lastZ = 0;
         float xSinceLast = 1f;
         float ySinceLast = 1f;
+        float zSinceLast = 1f;
 
         protected enum Pass {
             Flow = 0,
@@ -67,7 +68,7 @@ namespace OpticalFlow {
 
             GUI.DrawTexture(new Rect(offset, offset + height, width, height), flowBuffer);
             GUI.DrawTexture(new Rect(offset, offset, width, height), prevFrame);
-            
+
 
             //GUIStyle gs = new GUIStyle();
             //gs.fontSize = 200;
@@ -77,11 +78,13 @@ namespace OpticalFlow {
             Flowing();
             if (left) {
                 GUI.Label(new Rect(250, 20, 600, 600), "LEFT");
-                
-            }
-            if (right) {
-                GUI.Label(new Rect(250, 60, 600, 600), "RIGHT");
-
+                GameObject.Find("LabelRed").GetComponent<Text>().text = "LEFT CLICK!";
+            } else if (right) {
+                GUI.Label(new Rect(250, 20, 600, 600), "RIGHT");
+                GameObject.Find("LabelRed").GetComponent<Text>().text = "RIGHT CLICK!";
+            } else
+            {
+                GameObject.Find("LabelRed").GetComponent<Text>().text = "Not Clicked!";
             }
 
         }
@@ -121,40 +124,43 @@ namespace OpticalFlow {
         protected void Flowing() {
             int red = 0;
             for (int i = 0; i < R.Length; i++) {
-                if (R[i]>100)
-                    if (R[i] > 2*G[i])
+                if (R[i] > 100)
+                    if (R[i] > 2 * G[i])
                         red++;
             }
-            
+
             int green = 0;
             for (int i = 0; i < G.Length; i++) {
                 if (G[i] > 100)
-                    if (G[i] > 2*R[i])
+                    if (G[i] > 2 * R[i])
                         green++;
             }
 
             if (Time.realtimeSinceStartup - lastMove > cooldown && GameObject.Find("UIManager").GetComponent<UIManager>().interAction == "Wave") {
-                
-                if (red > 5) {
+
+                if (red > 10) {
                     resetMotion();
                     left = true;
-                    var objects = Resources.FindObjectsOfTypeAll<GameObject>().Where(obj => obj.name == "ScrollRect");
-                    foreach (var GameObject in objects) {
-                        
-                        StartCoroutine(GameObject.GetComponent<ScrollRectScript>().ScrollAnimationLeft());
+                    var x =  GameObject.FindGameObjectsWithTag("Back");
+                    for (int i = 0; i < x.Length; i++) {
+                        if (x[i].activeSelf) {
+                            x[i].GetComponent<Button>().onClick.Invoke();
+                            break;
+                        }
                     }
                     print("LEFT: ");
                     lastMove = Time.realtimeSinceStartup;
                 } else {
                     left = false;
                 }
-                if (green > 5) {
+                if (green > 10) {
                     resetMotion();
                     right = true;
-                    var objects = Resources.FindObjectsOfTypeAll<GameObject>().Where(obj => obj.name == "ScrollRect");
-                    foreach (var GameObject in objects) {
-                        StartCoroutine(GameObject.GetComponent<ScrollRectScript>().ScrollAnimationRight());
-
+                    GameObject.Find("Player").GetComponent<HeadTiltSelection>().selected.GetComponent<Button>().onClick.Invoke();
+                    if (GameObject.Find("Player").GetComponent<HeadTiltSelection>().selected.name == "Right") {
+                        GameObject.Find("Player").GetComponent<HeadTiltSelection>().selected.GetComponent<ButtonScript>().scrollRectScript.ButtonRightIsPressed();
+                    } else if (GameObject.Find("Player").GetComponent<HeadTiltSelection>().selected.name == "Left") {
+                        GameObject.Find("Player").GetComponent<HeadTiltSelection>().selected.GetComponent<ButtonScript>().scrollRectScript.ButtonLeftIsPressed();
                     }
                     print("RIGHT: ");
                     lastMove = Time.realtimeSinceStartup;
@@ -164,22 +170,27 @@ namespace OpticalFlow {
             } else {
                 resetMotion();
             }
+            
         }
 
         public void Calculate(Texture current) {
+            if (GameObject.Find("UIManager").GetComponent<UIManager>().interAction != "Wave")
+                return;
             if (prevFrame == null) {
                 Setup(current.width, current.height);
                 Graphics.Blit(current, prevFrame);
             }
-            //GameObject.Find("LabelRed").GetComponent<Text>().text = "Red: " + R[0] + ", " + R[1] + ", " + R[2] + ", " + R[3] + ", " + R[4] + ", " + R[5] + ", " + R[6];
-            //GameObject.Find("LabelGreen").GetComponent<Text>().text = "Green: " + G[0] + ", " + G[1] + ", " + G[2] + ", " + G[3] + ", " + G[4] + ", " + G[5] + ", " + G[6];
+            //GameObject.Find("LabelRed").GetComponent<Text>().text = "Red: " + R[0] + ", " + R[1] + ", " + R[2] + ", " + R[3] + ", " + R[4] + ", " + R[5] + ", " + R[6] + ", " + R[7] + ", " + R[8] + ", " + R[9] + ", " + R[10] + ", " + R[11] + ", " + R[12];
+            GameObject.Find("LabelGreen").GetComponent<Text>().text = "Green: " + G[0] + ", " + G[1] + ", " + G[2] + ", " + G[3] + ", " + G[4] + ", " + G[5] + ", " + G[6] + ", " + G[7] + ", " + G[8] + ", " + G[9] + ", " + G[10] + ", " + G[11] + ", " + G[12];
 
             xSinceLast = Math.Abs(Input.acceleration.x - lastX);
             ySinceLast = Math.Abs(Input.acceleration.y - lastY);
+            zSinceLast = Math.Abs(Input.acceleration.z - lastZ);
             lastX = Input.acceleration.x;
             lastY = Input.acceleration.y;
+            lastZ = Input.acceleration.z;
 
-            //GameObject.Find("LabelAccel").GetComponent<Text>().text = "AccelX: " + xSinceLast + ", " + ySinceLast;
+            GameObject.Find("LabelAccel").GetComponent<Text>().text = "AccelX: " + xSinceLast + ",Y: " + ySinceLast;
 
             flowMaterial.SetTexture("_PrevTex", prevFrame);
             flowMaterial.SetFloat("_Ratio", 1f * Screen.height / Screen.width);
@@ -199,7 +210,7 @@ namespace OpticalFlow {
 
 
             // Whole optical flow thingy
-            if (xSinceLast <= 0.04 || ySinceLast <= 0.04) {
+            if (xSinceLast <= 0.04 || ySinceLast <= 0.04 || zSinceLast <= 0.04) {
                 Texture2D texture = new Texture2D(resultBuffer.width, resultBuffer.height, TextureFormat.RGB24, false);
 
                 Rect rectReadPicture = new Rect(0, 0, resultBuffer.width, resultBuffer.height);
@@ -221,9 +232,9 @@ namespace OpticalFlow {
                 G[0] = 0;
                 for (int i = 0; i < temp.Length; i += 1) {
 
-                    if (temp[i].r*0.3 > temp[i].g && temp[i].r > 30) {
+                    if (temp[i].r * 0.3 > temp[i].g && temp[i].r > 30) {
                         R[0]++;
-                    } else if (temp[i].g*0.3 > temp[i].r && temp[i].g > 30) {
+                    } else if (temp[i].g * 0.3 > temp[i].r && temp[i].g > 30) {
                         G[0]++;
                     }
                 }
