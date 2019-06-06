@@ -11,7 +11,6 @@ public class UIManager : MonoBehaviour
     public string interAction;
     private bool timer = false;
 
-    //public JsonData data;
     private string data;
 
     private string path;
@@ -28,13 +27,11 @@ public class UIManager : MonoBehaviour
             PlayerPrefs.SetInt("userID", PlayerPrefs.GetInt("userID") + 1);
         }
 
-        //data = new JsonData("User ID", PlayerPrefs.GetInt("userID"));
         data = "User ID:" + PlayerPrefs.GetInt("userID") + "\n";
 
         path = Path.Combine(Application.persistentDataPath, "data.json");
         Debug.Log(data);
         AppendData();
-        //DeserializeData();
     }
 
     private void Update()
@@ -45,42 +42,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    //public void setInterAction(string checkedAction)
-    //{
-    //    interAction = checkedAction;
-    //    if (interAction == "Clap")
-    //    {
-    //        GameObject.Find("Player").GetComponent<GazeControl>().usingGaze = false;
-    //    }
-    //    else if(interAction == "Tilt")
-    //    {
-    //        GameObject.Find("Player").GetComponent<GazeControl>().usingGaze = false;
-    //    }
-    //    else
-    //    {
-    //        GameObject.Find("Player").GetComponent<GazeControl>().usingGaze = true;
-    //    }
-    //}
-
-    //public void DisableFirstToSecond(Animator anim)
-    //{
-    //    anim.SetBool("FirstToSecond", false);
-    //}
-
-    //public void EnableFirstToSecond(Animator anim)
-    //{
-    //    anim.SetBool("FirstToSecond", true);
-    //}
-
-    //public void DisableSecondToThird(Animator anim)
-    //{
-    //    anim.SetBool("SecondToThird", false);
-    //}
-
-    //public void EnableSecondToThird(Animator anim)
-    //{
-    //    anim.SetBool("SecondToThird", true);
-    //}
     public void EnableDisplayed(Animator anim)
     {
         anim.SetBool("isDisplayed", true);
@@ -122,19 +83,23 @@ public class UIManager : MonoBehaviour
         if (action == interAction)
         {
             timer = false;
-            //data = new JsonData(action, timeOfAction);
             data = "Action: " + action + " Time: " + timeOfAction + "\n";
             Debug.Log(data);
             AppendData();
-            //DeserializeData();
-            //WriteString(action, timeOfAction);
         }
     }
 
-     public void DisableToggles() {
+    public void DisableToggles() {
         GameObject.Find("UseClap").SetActive(false);
         GameObject.Find("UseHeadTilt").SetActive(false);
         GameObject.Find("UseWave").SetActive(false);
+    }
+
+    public void EnableToggles(GameObject parent)
+    {
+        parent.transform.Find("UseClap").gameObject.SetActive(true);
+        parent.transform.Find("UseHeadTilt").gameObject.SetActive(true);
+        parent.transform.Find("UseWave").gameObject.SetActive(true);
     }
 
     public void OnToggle(string type) {
@@ -175,52 +140,14 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    //static void WriteString(string action, float timeOfAction)
-    //{
-    //    string path = "Assets/Resources/log.txt";
-
-    //    //Write some text to the test.txt file
-    //    StreamWriter writer = new StreamWriter(path, true);
-    //    writer.WriteLine(action + " " + timeOfAction);
-    //    writer.Close();
-
-    //    //Re-import the file to update the reference in the editor
-    //    AssetDatabase.ImportAsset(path);
-    //    TextAsset asset = Resources.Load<TextAsset>("log");
-
-    //    //Print the text from the file
-    //    //Debug.Log(asset.text);
-    //}
-
     public void AppendData()
     {
-        //string jsonDataString = JsonUtility.ToJson(data, true);
-
         File.AppendAllText(path, data);
     }
 
     public void DeserializeData()
     {
         string loadedData = File.ReadAllText(path);
-
-        //data = JsonUtility.FromJson<JsonData>(loadedJsonDataString);
-
-        //Debug.Log("action: " + data.action.ToString() + " | time: " + data.time);
         Debug.Log(loadedData);
      }
-}
-
-[System.Serializable]
-public class JsonData
-{
-    public string action;
-    public float time;
-
-    public JsonData(string action, float time)
-    {
-        this.action = action;
-        this.time = time;
-    }
-
-    public JsonData() { }
 }
