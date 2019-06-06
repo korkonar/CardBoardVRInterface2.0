@@ -80,12 +80,29 @@ public class UIManager : MonoBehaviour
 
     public void EndTimer(string action)
     {
+        Debug.Log("test");
+        GameObject info = GameObject.Find("Norwegian Forest Cat");
         if (action == interAction)
         {
             timer = false;
             data = "Action: " + action + " Time: " + timeOfAction + "\n";
             Debug.Log(data);
             AppendData();
+            switch (action)
+            {
+                case "Clap":
+                    info = GameObject.Find("Cape Jackal");
+                    break;
+                case "Wave":
+                    info = GameObject.Find("Persian leopard");
+                    break;
+                case "Tilt":
+                    info = GameObject.Find("Kiang");
+                    break;
+            }
+            info.transform.Find("Video Player").gameObject.SetActive(true);
+            info.GetComponent<RawImage>().enabled = true;
+            info.transform.Find("Text").gameObject.SetActive(false);
         }
     }
 
