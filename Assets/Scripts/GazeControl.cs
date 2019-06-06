@@ -6,26 +6,27 @@ using UnityEngine.EventSystems;
 
 public class GazeControl : MonoBehaviour
 {
-	public Image imgGaze;
-	public float totalTime;
-	bool gvrStatus;
-	float gvrTimer;
-    Button but;
+    public Image imgGaze;
+    public float totalTime;
+    public bool gvrStatus;
+    float gvrTimer;
+    GameObject but;
     string butName;
     ScrollRectScript menuScroll;
+    public bool usingGaze = true;
 
     // Start is called before the first frame update
     void Start()
     {
-        totalTime = 1.5;
+        totalTime = 1;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (gvrStatus){
-        	gvrTimer += Time.deltaTime;
-        	imgGaze.fillAmount = gvrTimer / totalTime;
+        if (gvrStatus && usingGaze){
+            gvrTimer += Time.deltaTime;
+            imgGaze.fillAmount = gvrTimer / totalTime;
             if (imgGaze.fillAmount == 1){
                 buttonClick();
             }
@@ -39,28 +40,34 @@ public class GazeControl : MonoBehaviour
             menuScroll.ButtonLeftIsPressed();
             return;
         }
-        if (butName == "Right") {
+        else if (butName == "Right") {
             gvrTimer = 0;
             imgGaze.fillAmount = 0;
             menuScroll.ButtonRightIsPressed();
             return;
         }
-        var pointer = new PointerEventData(EventSystem.current);
-        ExecuteEvents.Execute(but.gameObject, pointer, ExecuteEvents.submitHandler);
+        else if(butName == "UseClap" || butName == "UseHeadTilt")
+        {
+            gvrTimer = 0;
+            imgGaze.fillAmount = 0;
+            but.GetComponent<Toggle>().isOn = true;
+            return;
+        }
+        but.GetComponent<Button>().onClick.Invoke();
     }
 
-    public void GVROn(Button b, string buttonName, ScrollRectScript menu){
+    public void GVROn(GameObject b, string buttonName, ScrollRectScript menu){
         gvrTimer = 0;
         imgGaze.fillAmount = 0;
         but = b;
         butName = buttonName;
         menuScroll = menu;
-    	gvrStatus = true;
+        gvrStatus = true;
     }
 
     public void GVROff(){
-    	gvrStatus = false;
-    	gvrTimer = 0;
-    	imgGaze.fillAmount = 0;
+        gvrStatus = false;
+        gvrTimer = 0;
+        imgGaze.fillAmount = 0;
     }
 }
