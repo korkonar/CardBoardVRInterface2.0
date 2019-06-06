@@ -89,10 +89,13 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void DisableToggles() {
-        GameObject.Find("UseClap").SetActive(false);
-        GameObject.Find("UseHeadTilt").SetActive(false);
-        GameObject.Find("UseWave").SetActive(false);
+    public void DisableToggles(GameObject parent) {
+        //GameObject.Find("UseClap").SetActive(false);
+        //GameObject.Find("UseHeadTilt").SetActive(false);
+        //GameObject.Find("UseWave").SetActive(false);
+        parent.transform.Find("UseClap").gameObject.SetActive(false);
+        parent.transform.Find("UseHeadTilt").gameObject.SetActive(false);
+        parent.transform.Find("UseWave").gameObject.SetActive(false);
     }
 
     public void EnableToggles(GameObject parent)
