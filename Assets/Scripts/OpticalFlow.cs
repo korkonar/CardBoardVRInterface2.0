@@ -78,13 +78,12 @@ namespace OpticalFlow {
             Flowing();
             if (left) {
                 GUI.Label(new Rect(250, 20, 600, 600), "LEFT");
-                GameObject.Find("LabelRed").GetComponent<Text>().text = "LEFT CLICK!";
+                //GameObject.Find("LabelRed").GetComponent<Text>().text = "LEFT CLICK!";
             } else if (right) {
                 GUI.Label(new Rect(250, 20, 600, 600), "RIGHT");
-                GameObject.Find("LabelRed").GetComponent<Text>().text = "RIGHT CLICK!";
-            } else
-            {
-                GameObject.Find("LabelRed").GetComponent<Text>().text = "Not Clicked!";
+                //GameObject.Find("LabelRed").GetComponent<Text>().text = "RIGHT CLICK!";
+            } else {
+                //GameObject.Find("LabelRed").GetComponent<Text>().text = "Not Clicked!";
             }
 
         }
@@ -142,7 +141,7 @@ namespace OpticalFlow {
                     resetMotion();
                     left = true;
                     var x =  GameObject.FindGameObjectsWithTag("Back");
-                    for (int i = 0; i < x.Length; i++) {
+                    for (int i = x.Length-1; i >= 0; i--) {
                         if (x[i].activeSelf) {
                             x[i].GetComponent<Button>().onClick.Invoke();
                             break;
@@ -181,7 +180,7 @@ namespace OpticalFlow {
                 Graphics.Blit(current, prevFrame);
             }
             //GameObject.Find("LabelRed").GetComponent<Text>().text = "Red: " + R[0] + ", " + R[1] + ", " + R[2] + ", " + R[3] + ", " + R[4] + ", " + R[5] + ", " + R[6] + ", " + R[7] + ", " + R[8] + ", " + R[9] + ", " + R[10] + ", " + R[11] + ", " + R[12];
-            GameObject.Find("LabelGreen").GetComponent<Text>().text = "Green: " + G[0] + ", " + G[1] + ", " + G[2] + ", " + G[3] + ", " + G[4] + ", " + G[5] + ", " + G[6] + ", " + G[7] + ", " + G[8] + ", " + G[9] + ", " + G[10] + ", " + G[11] + ", " + G[12];
+            //GameObject.Find("LabelGreen").GetComponent<Text>().text = "Green: " + G[0] + ", " + G[1] + ", " + G[2] + ", " + G[3] + ", " + G[4] + ", " + G[5] + ", " + G[6] + ", " + G[7] + ", " + G[8] + ", " + G[9] + ", " + G[10] + ", " + G[11] + ", " + G[12];
 
             xSinceLast = Math.Abs(Input.acceleration.x - lastX);
             ySinceLast = Math.Abs(Input.acceleration.y - lastY);
@@ -190,7 +189,7 @@ namespace OpticalFlow {
             lastY = Input.acceleration.y;
             lastZ = Input.acceleration.z;
 
-            GameObject.Find("LabelAccel").GetComponent<Text>().text = "AccelX: " + xSinceLast + ",Y: " + ySinceLast;
+            //GameObject.Find("LabelAccel").GetComponent<Text>().text = "AccelX: " + xSinceLast + ",Y: " + ySinceLast;
 
             flowMaterial.SetTexture("_PrevTex", prevFrame);
             flowMaterial.SetFloat("_Ratio", 1f * Screen.height / Screen.width);
