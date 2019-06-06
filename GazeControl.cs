@@ -18,7 +18,7 @@ public class GazeControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        totalTime = 1.5F;
+        totalTime = 1;
     }
 
     // Update is called once per frame
@@ -53,9 +53,7 @@ public class GazeControl : MonoBehaviour
             but.GetComponent<Toggle>().isOn = true;
             return;
         }
-        var pointer = new PointerEventData(EventSystem.current);
-        ExecuteEvents.Execute(but, pointer, ExecuteEvents.submitHandler);
-        //but.GetComponent<Button>().onClick.Invoke();
+        but.GetComponent<Button>().onClick.Invoke();
     }
 
     public void GVROn(GameObject b, string buttonName, ScrollRectScript menu){
