@@ -80,7 +80,6 @@ public class UIManager : MonoBehaviour
 
     public void EndTimer(string action)
     {
-        Debug.Log("test");
         GameObject info = GameObject.Find("Norwegian Forest Cat");
         if (action == interAction)
         {
@@ -88,7 +87,7 @@ public class UIManager : MonoBehaviour
             data = "Action: " + action + " Time: " + timeOfAction + "\n";
             Debug.Log(data);
             AppendData();
-            switch (action)
+            switch (interAction)
             {
                 case "Clap":
                     info = GameObject.Find("Cape Jackal");
@@ -101,6 +100,7 @@ public class UIManager : MonoBehaviour
                     break;
             }
             info.transform.Find("Video Player").gameObject.SetActive(true);
+            info.transform.Find("Reset").gameObject.SetActive(true);
             info.GetComponent<RawImage>().enabled = true;
             info.transform.Find("Text").gameObject.SetActive(false);
         }
